@@ -14,8 +14,6 @@ data "terraform_remote_state" "core" {
   }
 }
 
-
-
 ### Email settings
 variable "ses_smtp_user" {}
 variable "ses_smtp_password" {}
