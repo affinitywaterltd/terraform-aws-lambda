@@ -4,8 +4,8 @@ resource "aws_lambda_function" "monthly_report" {
   function_name = "Monthly_AWS_Report"
   filename      = "${path.module}/monthly_report.zip"
 
-  #role             = "${data.terraform_remote_state.core.lambda_reporting_role}"
-  role             = "Lambda_Reporting"
+  role             = "${data.terraform_remote_state.core.lambda_reporting_role}"
+  #role             = "Lambda_Reporting"
   source_code_hash = "${base64sha256(file("${path.module}/monthly_report.zip"))}"
   handler          = "monthly_report.lambda_handler"
   runtime          = "python2.7"
