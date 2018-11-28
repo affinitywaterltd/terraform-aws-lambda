@@ -2,6 +2,10 @@
 
 variable "cloudwatch_rule" {}
 
+variable "ses_smtp_user" {}
+variable "ses_smtp_password" {}
+
+
 ### Monthly report
 
 resource "aws_lambda_function" "monthly_aws_cost_report" {
@@ -20,7 +24,8 @@ resource "aws_lambda_function" "monthly_aws_cost_report" {
 
   environment {
     variables = {
-      foo = "bar"
+      ses_smtp_user = "${var.ses_smtp_user}"
+      ses_smtp_password = "${var.ses_smtp_password}"
     }
   }
 }
