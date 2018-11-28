@@ -1,7 +1,4 @@
 
-variable "ses_smtp_user" {}
-variable "ses_smtp_password" {}
-
 # AWS Monthly Report
 module "monthly_aws_cost_report" {
   source      = "./monthly_aws_cost_report"
