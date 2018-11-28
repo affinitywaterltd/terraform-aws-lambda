@@ -15,9 +15,9 @@ data "terraform_remote_state" "core" {
 
 variable "ses_smtp_user" {
   description = "Contains SES IAM User Access details - From TFE"
-  default = "replace me"
+  default = "${env.ses_smtp_user}"
 }
 variable "ses_smtp_password" {
   description = "Contains SES IAM User Access password - From TFE"
-  default = "replace me"
+  default = "${env.ses_smtp_password}"
 }
