@@ -20,7 +20,7 @@ iam = boto3.client('iam')
 SES_SMTP_USER = os.environ['SES_SMTP_USER']
 SES_SMTP_PASSWORD = os.environ['SES_SMTP_PASSWORD']
 
-MAIL_FROM = 'infra@affinitywater.co.uk'
+MAIL_FROM = 'glenn.haddrell@affinitywater.co.uk'
 MAIL_TO = ['glenn.haddrell@affinitywater.co.uk']
 MAIL_SUBJECT="AWS Monthly Report"
 MAIL_BODY=MAIL_SUBJECT + '\n'
