@@ -29,5 +29,5 @@ resource "aws_lambda_function" "monthly_cost_report" {
 resource "aws_cloudwatch_event_target" "monthly_report_target" {
   target_id = "monthly_cost_report"
   arn = "${aws_lambda_function.monthly_cost_report.arn}"
-  rule = "${local.cloudwatch_rule}"
+  rule = "${var.cloudwatch_rule}"
 }
