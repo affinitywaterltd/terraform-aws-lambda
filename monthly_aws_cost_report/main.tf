@@ -1,9 +1,6 @@
 
 
 variable "cloudwatch_rule" {}
-variable "ses_smtp_user" {}
-variable "ses_smtp_password" {}
-
 
 ### Monthly report
 
@@ -16,7 +13,7 @@ resource "aws_lambda_function" "monthly_aws_cost_report" {
   handler          = "monthly_aws_cost_report.lambda_handler"
   runtime          = "python2.7"
 
-  description = "Lists all the cost centre/quadrant for EC2 and RDS - emails and uploads to S3 - Updated ${var.ses_smtp_user}"
+  description = "Lists all the cost centre/quadrant for EC2 and RDS - emails and uploads to S3 - Updated ${var.ses_user}"
 
   memory_size = 128
   timeout     = 300
