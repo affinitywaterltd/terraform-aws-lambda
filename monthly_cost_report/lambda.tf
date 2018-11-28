@@ -1,12 +1,16 @@
+
+
+variable "cloudwatch_rule" {}
+
 ### Monthly report
 
-resource "aws_lambda_function" "monthly_report" {
-  function_name = "Monthly_AWS_Report"
+resource "aws_lambda_function" "monthly_cost_report" {
+  function_name = "auto_monthly_aws_cost_report"
   filename      = "${path.module}/monthly_report.zip"
 
   role             = "${data.terraform_remote_state.core.lambda_report_role}" 
   source_code_hash = "${base64sha256(file("${path.module}/monthly_report.zip"))}"
-  handler          = "monthly_report.lambda_handler"
+  handler          = "monthly_cost_report.lambda_handler"
   runtime          = "python2.7"
 
   description = "Lists all the cost centre/quadrant for EC2 and RDS - emails and uploads to S3 - Updated"
@@ -19,4 +23,12 @@ resource "aws_lambda_function" "monthly_report" {
       foo = "bar"
     }
   }
+}
+
+# Attach Cloudwatch event to lambda function
+resource "aws_cloudwatch_event_target" "monthly_report_target" {
+  target_id = "monthly_cost_report"
+  arn = "${local.cloudwatch_rule}"
+  rule = 
+
 }
