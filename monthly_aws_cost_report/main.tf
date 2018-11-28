@@ -1,9 +1,6 @@
 
 
 variable "cloudwatch_rule" {}
-
-variable "ses_smtp_user" {}
-variable "ses_smtp_password" {}
 variable "ses_smtp_user" {}
 variable "ses_smtp_password" {}
 
