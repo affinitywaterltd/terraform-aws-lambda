@@ -28,7 +28,6 @@ resource "aws_lambda_function" "monthly_cost_report" {
 # Attach Cloudwatch event to lambda function
 resource "aws_cloudwatch_event_target" "monthly_report_target" {
   target_id = "monthly_cost_report"
-  arn = "${local.cloudwatch_rule}"
-  rule = 
-
+  arn = "${aws_lambda_function.monthly_cost_report}"
+  rule = "${local.cloudwatch_rule}"
 }
