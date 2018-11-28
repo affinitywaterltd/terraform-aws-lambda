@@ -1,3 +1,7 @@
+
+variable "account" {}
+variable "environment" {}
+
 data "terraform_remote_state" "core" {
   backend = "atlas"
 
