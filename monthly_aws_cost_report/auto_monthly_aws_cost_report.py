@@ -18,13 +18,35 @@ iam = boto3.client('iam')
 #Email settings
 
 SES_SMTP_USER = os.environ['SES_SMTP_USER']
-SES_SMTP_PASSWORD = os.environ['SES_SMTP_PASSWORD']
+SES_SMTP_PASSWORD_RAW = os.environ['SES_SMTP_PASSWORD']
 
 MAIL_FROM = 'glenn.haddrell@affinitywater.co.uk'
 MAIL_TO = ['glenn.haddrell@affinitywater.co.uk']
 MAIL_SUBJECT="AWS Monthly Report"
 MAIL_BODY=MAIL_SUBJECT + '\n'
 filepath = '/tmp/monthly.csv'
+
+# Fetch the environment variable called smtp_ses_password, which contains
+# the secret access key for your IAM user.
+key = SES_SMTP_PASSWORD_RAW
+
+# These varibles are used when calculating the SMTP password. You shouldn't
+# change them.
+message = 'SendRawEmail'
+version = '\x02'
+
+# See if the environment variable exists. If not, quit and show an error.
+if key == 0:
+    sys.exit("Error: Can't find environment variable smtp_ses_password.")
+
+# Compute an HMAC-SHA256 key from the AWS secret access key.
+signatureInBytes = hmac.new(key.encode('utf-8'),message.encode('utf-8'),hashlib.sha256).digest()
+# Prepend the version number to the signature.
+signatureAndVersion = version.encode('utf-8') + signatureInBytes
+# Base64-encode the string that contains the version number and signature.
+SES_SMTP_PASSWORD = base64.b64encode(signatureAndVersion)
+# Decode the string and print it to the console.
+print(SES_SMTP_PASSWORD.decode('utf-8'))
 
 #Set up email server using AWS SMPTP
 
