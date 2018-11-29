@@ -6,11 +6,11 @@ variable "cloudwatch_rule" {}
 
 resource "aws_lambda_function" "monthly_aws_cost_report" {
   function_name = "auto_monthly_aws_cost_report"
-  filename      = "${path.module}/monthly_aws_cost_report.zip"
+  filename      = "${path.module}/auto_monthly_aws_cost_report.zip"
 
   role             = "${data.terraform_remote_state.core.lambda_report_role}" 
-  source_code_hash = "${base64sha256(file("${path.module}/monthly_aws_cost_report.zip"))}"
-  handler          = "monthly_aws_cost_report.lambda_handler"
+  source_code_hash = "${base64sha256(file("${path.module}/auto_monthly_aws_cost_report.zip"))}"
+  handler          = "auto_monthly_aws_cost_report.lambda_handler"
   runtime          = "python2.7"
 
   description = "Lists all the cost centre/quadrant for EC2 and RDS - emails and uploads to S3"
