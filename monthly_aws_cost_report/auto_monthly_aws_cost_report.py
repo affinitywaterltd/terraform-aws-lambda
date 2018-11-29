@@ -7,7 +7,11 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEBase import MIMEBase
 from email.MIMEText import MIMEText
 from email import Encoders
-import os
+import os      #required to fetch environment varibles
+import hmac    #required to compute the HMAC key
+import hashlib #required to create a SHA256 hash
+import base64  #required to encode the computed key
+import sys     #required for system functions (exiting, in this case)
 
 # Set up resource calls
 ec2 = boto3.resource('ec2')
@@ -17,8 +21,8 @@ iam = boto3.client('iam')
 
 #Email settings
 
-SES_SMTP_USER = os.environ['SES_SMTP_USER']
-SES_SMTP_PASSWORD_RAW = os.environ['SES_SMTP_PASSWORD']
+SES_SMTP_USER = os.environ['smtp_ses_user']
+SES_SMTP_PASSWORD_RAW = os.environ['smtp_ses_password']
 
 MAIL_FROM = 'glenn.haddrell@affinitywater.co.uk'
 MAIL_TO = ['glenn.haddrell@affinitywater.co.uk']
