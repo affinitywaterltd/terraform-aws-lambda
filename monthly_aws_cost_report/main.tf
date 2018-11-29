@@ -21,6 +21,7 @@ resource "aws_lambda_function" "monthly_aws_cost_report" {
   environment {
     variables = {
       smtp_ses_password = "${var.ses_smtp_password}"
+      smtp_ses_user = "${var.ses_smtp_user}"
     }
   }
 }
