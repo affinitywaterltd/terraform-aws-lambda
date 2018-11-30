@@ -24,8 +24,8 @@ iam = boto3.client('iam')
 SES_SMTP_USER = os.environ['smtp_ses_user']
 SES_SMTP_PASSWORD_RAW = os.environ['smtp_ses_password']
 
-MAIL_FROM = 'glenn.haddrell@affinitywater.co.uk'
-MAIL_TO = ['glenn.haddrell@affinitywater.co.uk']
+MAIL_FROM = 'infra@affinitywater.co.uk'
+MAIL_TO = ['infra@affinitywater.co.uk']
 MAIL_SUBJECT="AWS Monthly Report"
 MAIL_BODY=MAIL_SUBJECT + '\n'
 filepath = '/tmp/monthly.csv'
