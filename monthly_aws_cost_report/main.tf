@@ -1,6 +1,7 @@
 
 
-variable "cloudwatch_rule" {}
+variable "cloudwatch_rule_name" {}
+variable "cloudwatch_rule_arn" {}
 
 ### Monthly report
 
@@ -31,13 +32,13 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
   action        = "lambda:InvokeFunction"
   function_name = "${aws_lambda_function.monthly_aws_cost_report.function_name}"
   principal     = "events.amazonaws.com"
-  source_arn    = "${var.cloudwatch_rule.arn}"
+  source_arn    = "${var.cloudwatch_rule_arn}"
 }
 
 # Attach Cloudwatch event to lambda function
 resource "aws_cloudwatch_event_target" "monthly_aws_cost_report_target" {
   target_id = "monthly_aws_cost_report"
   arn = "${aws_lambda_function.monthly_aws_cost_report.arn}"
-  rule = "${var.cloudwatch_rule.name}"
+  rule = "${var.cloudwatch_rule_name}"
 }
 
