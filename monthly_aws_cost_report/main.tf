@@ -26,9 +26,18 @@ resource "aws_lambda_function" "monthly_aws_cost_report" {
   }
 }
 
+resource "aws_lambda_permission" "allow_cloudwatch" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = "${aws_lambda_function.monthly_aws_cost_report.function_name}"
+  principal     = "events.amazonaws.com"
+  source_arn    = "${var.cloudwatch_rule.arn}"
+}
+
 # Attach Cloudwatch event to lambda function
 resource "aws_cloudwatch_event_target" "monthly_aws_cost_report_target" {
   target_id = "monthly_aws_cost_report"
   arn = "${aws_lambda_function.monthly_aws_cost_report.arn}"
-  rule = "${var.cloudwatch_rule}"
+  rule = "${var.cloudwatch_rule.name}"
 }
+
