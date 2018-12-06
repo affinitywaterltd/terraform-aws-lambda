@@ -16,7 +16,7 @@ resource "aws_lambda_function" "monthly_aws_cost_report" {
 
   description = "Lists all the cost centre/quadrant for EC2 and RDS - emails and uploads to S3"
 
-  tags = "${local.common_tags}"
+  tags = "${local.base_tags}"
 
   memory_size = 128
   timeout     = 300
