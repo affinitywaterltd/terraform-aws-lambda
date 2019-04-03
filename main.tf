@@ -1,6 +1,6 @@
 
 # AWS Monthly Report
-/*
+
 module "monthly_aws_cost_report" {
   source      = "./monthly_aws_cost_report"
   account     = "${var.account}"
@@ -10,4 +10,3 @@ module "monthly_aws_cost_report" {
   ses_smtp_user = "${var.ses_smtp_user}"
   ses_smtp_password = "${var.ses_smtp_password}"
 }
-*/
