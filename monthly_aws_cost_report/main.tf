@@ -4,7 +4,7 @@ variable "cloudwatch_rule_name" {}
 variable "cloudwatch_rule_arn" {}
 
 ### Monthly report
-
+/*
 resource "aws_lambda_function" "monthly_aws_cost_report" {
   function_name = "auto_monthly_aws_cost_report"
   filename      = "${path.module}/auto_monthly_aws_cost_report.zip"
@@ -43,4 +43,4 @@ resource "aws_cloudwatch_event_target" "monthly_aws_cost_report_target" {
   arn = "${aws_lambda_function.monthly_aws_cost_report.arn}"
   rule = "${var.cloudwatch_rule_name}"
 }
-
+*/
