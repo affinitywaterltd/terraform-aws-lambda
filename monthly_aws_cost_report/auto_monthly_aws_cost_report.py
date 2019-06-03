@@ -78,12 +78,13 @@ def mail(fromadd,to, subject, text, attach):
 def servers():  # Write instance tags to file
 
     instances = ec2.instances.all()
-
+    
     #Open local file to write
     f = open(filepath, 'w')
     f.write("Name, Type, Size, Platform, CreationDate, CostCentre, Quadrant, State, Description, Encryption\n")
     
     for i in instances:
+        processerr = 'false'
         try:
             for tag in i.tags:
                     try:
@@ -113,10 +114,14 @@ def servers():  # Write instance tags to file
 
         except:
             print i.id
+            processerr = 'true'
 
         EC2 = 'EC2'
 
-        f.write('%s,%s,%s,%s,%s,%s,%s,%s, %s\n' %(name['Value'], EC2, i.instance_type, i.platform, createdate['Value'], costcentre['Value'], quadrant['Value'], i.state['Name'], description['Value']))
+        if processerr == 'false':
+            f.write('%s,%s,%s,%s,%s,%s,%s,%s, %s\n' %(name['Value'], EC2, i.instance_type, i.platform, createdate['Value'], costcentre['Value'], quadrant['Value'], i.state['Name'], description['Value']))
+        else:
+            print i.id
         
 def databases(): # Write DB instance tags to file
     
