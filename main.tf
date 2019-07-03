@@ -1,5 +1,5 @@
 
-# AWS Monthly Report
+# AWS Monthly Cost Report
 
 module "monthly_aws_cost_report" {
   source      = "./monthly_aws_cost_report"
@@ -9,4 +9,14 @@ module "monthly_aws_cost_report" {
   cloudwatch_rule_arn = "${aws_cloudwatch_event_rule.schedule_start_of_month.arn}"
   ses_smtp_user = "${var.ses_smtp_user}"
   ses_smtp_password = "${var.ses_smtp_password}"
+}
+
+
+# Daily snapshot cleanup
+
+module "daily_mw_snapshot_cleanup" {
+  source      = "./daily_mw_snapshot_cleanup"
+  account     = "${var.account}"
+  environment = "${var.environment}"
+  cloudwatch_rule_name = "${aws_cloudwatch_event_rule.schedule_daily.name}"
 }
