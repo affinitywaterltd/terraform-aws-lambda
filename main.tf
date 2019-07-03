@@ -19,4 +19,5 @@ module "daily_mw_snapshot_cleanup" {
   account     = "${var.account}"
   environment = "${var.environment}"
   cloudwatch_rule_name = "${aws_cloudwatch_event_rule.schedule_daily.name}"
+  cloudwatch_rule_arn = "${aws_cloudwatch_event_rule.schedule_daily.arn}"
 }
