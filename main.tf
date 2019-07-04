@@ -11,7 +11,7 @@ module "monthly_aws_cost_report" {
   ses_smtp_password = "${var.ses_smtp_password}"
 }
 
-/*
+
 # Daily snapshot cleanup
 
 module "daily_mw_snapshot_cleanup" {
@@ -20,4 +20,4 @@ module "daily_mw_snapshot_cleanup" {
   environment = "${var.environment}"
   cloudwatch_rule_name = "${aws_cloudwatch_event_rule.schedule_daily.name}"
   cloudwatch_rule_arn = "${aws_cloudwatch_event_rule.schedule_daily.arn}"
-}*/
+}
