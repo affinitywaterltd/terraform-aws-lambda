@@ -21,3 +21,13 @@ module "daily_mw_snapshot_cleanup" {
   cloudwatch_rule_name = "${aws_cloudwatch_event_rule.schedule_daily.name}"
   cloudwatch_rule_arn = "${aws_cloudwatch_event_rule.schedule_daily.arn}"
 }
+
+# Maintenance Window Parameter Injection
+
+module "triggered_maintenance_window_parameter_injection" {
+  source      = "./triggered_maintenance_window_parameter_injection"
+  account     = "${var.account}"
+  environment = "${var.environment}"
+  cloudwatch_rule_name = "${aws_cloudwatch_event_rule.schedule_daily.name}"
+  cloudwatch_rule_arn = "${aws_cloudwatch_event_rule.schedule_daily.arn}"
+}
