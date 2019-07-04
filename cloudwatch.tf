@@ -12,7 +12,7 @@ resource "aws_cloudwatch_event_rule" "schedule_daily" {
 
 resource "aws_cloudwatch_event_rule" "trigger_maintenance_window_task_registered" {
   name        = "trigger_maintenance_window_task_registered"
-  description = "Runs daily"
+  description = "Runs every time a maintenance window is updated"
   event_pattern = <<PATTERN
 {
   "source": [
