@@ -22,7 +22,7 @@ resource "aws_lambda_function" "triggered_maintenance_window_parameter_injection
 
   environment {
     variables = {
-      task_name_filter = "awl_start_stopped_instances"
+      task_name_filter = "start_stopped_instances"
     }
   }
 }
