@@ -18,11 +18,10 @@ resource "aws_lambda_function" "triggered_maintenance_window_parameter_injection
   tags = "${local.base_tags}"
 
   memory_size = 128
-  timeout     = 10
+  timeout     = 3
 
   environment {
     variables = {
-      task_type = "AUTOMATION"
       task_name_filter = "awl_start_stopped_instances"
     }
   }
