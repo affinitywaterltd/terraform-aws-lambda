@@ -22,7 +22,7 @@ module "daily_mw_snapshot_cleanup" {
 }
 
 # Maintenance Window Parameter Injection
-
+/*
 module "triggered_maintenance_window_parameter_injection" {
   source      = "./triggered_maintenance_window_parameter_injection"
   account     = "${var.account}"
@@ -30,3 +30,4 @@ module "triggered_maintenance_window_parameter_injection" {
   cloudwatch_rule_name = "${aws_cloudwatch_event_rule.trigger_maintenance_window_task_registered.name}"
   cloudwatch_rule_arn = "${aws_cloudwatch_event_rule.trigger_maintenance_window_task_registered.arn}"
 }
+*/
