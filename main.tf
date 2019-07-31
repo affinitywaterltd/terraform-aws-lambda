@@ -33,14 +33,14 @@ module "triggered_ec2_tagging_citrix_mcs_servers" {
 
 
 # Configure CloudWatchLogs Expiration Policy
-/*
+
 module "monthly_cloudwatch_logs_expiration" {
   source      = "./monthly_cloudwatch_logs_expiration"
   account     = "${var.account}"
   environment = "${var.environment}"
   cloudwatch_rule_name = "${aws_cloudwatch_event_rule.schedule_start_of_month.name}"
   cloudwatch_rule_arn = "${aws_cloudwatch_event_rule.schedule_start_of_month.arn}"
-}*/
+}
 
 # Maintenance Window Parameter Injection
 /*
