@@ -24,3 +24,23 @@ resource "aws_cloudwatch_event_rule" "trigger_maintenance_window_task_registered
 }
   PATTERN
 }
+
+resource "aws_cloudwatch_event_rule" "trigger_ec2_instance_state_pending" {
+  name        = "trigger_ec2_instance_state_pending"
+  description = "Runs every time an EC2 Instance is created (status 'Pending')"
+  event_pattern = <<PATTERN
+{
+  "source": [
+    "aws.ec2"
+  ],
+  "detail-type": [
+    "EC2 Instance State-change Notification"
+  ],
+  "detail": {
+    "state": [
+      "pending"
+    ]
+  }
+}
+  PATTERN
+}
