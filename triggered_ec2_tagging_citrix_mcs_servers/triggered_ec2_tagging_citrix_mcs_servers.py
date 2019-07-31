@@ -1,5 +1,27 @@
 import boto3
 
+ENVIRO = os.environ['environment']
+ACCOUNT = os.environ['account']
+
+switch (ENVIRO) {
+   case "prod":  environment_tag = "Production";
+                  break;
+   case "uat":  environment_tag = "UAT";
+                  break;
+   case "sit":  environment_tag = "SIT";
+                  break;
+   case "dev":  environment_tag = "Development";
+                  break;
+   default: environment_tag = "Unknown";
+}
+
+switch (ACCOUNT) {
+   case "afb":  organisation_tag = "AFB";
+                  break;
+   default: organisation_tag = "Affinity Water";
+}
+
+
 mytags = [
     {
        "Key" : "Backup",
@@ -7,7 +29,7 @@ mytags = [
     },
     {
        "Key" : "Organisation",
-       "Value" : "AWL"
+       "Value" : organisation_tag
     },
     {
        "Key" : "BusinessOwner",
@@ -46,7 +68,7 @@ mytags = [
     },
     {
        "Key" : "Environment",
-       "Value" : "Production"
+       "Value" : environment_tag
     },
     {
        "Key" : "Maintenance",
