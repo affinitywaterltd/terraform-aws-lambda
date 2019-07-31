@@ -1,8 +1,6 @@
 
 variable "cloudwatch_rule_name" {}
 variable "cloudwatch_rule_arn" {}
-variable "account" {}
-variable "environment" {}
 
 ### Update Maintenance Window Parameters
 
@@ -33,7 +31,7 @@ resource "aws_lambda_function" "triggered_ec2_tagging_citrix_mcs_servers" {
 resource "aws_lambda_permission" "allow_cloudwatch" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.triggered_maintenance_window_parameter_injection.function_name}"
+  function_name = "${aws_lambda_function.triggered_ec2_tagging_citrix_mcs_servers.function_name}"
   principal     = "events.amazonaws.com"
   source_arn    = "${var.cloudwatch_rule_arn}"
 }
