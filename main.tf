@@ -22,14 +22,14 @@ module "daily_mw_snapshot_cleanup" {
 }
 
 # Tag Citrix MCS Servers
-
+/*
 module "triggered_ec2_tagging_citrix_mcs_servers" {
   source      = "./triggered_ec2_tagging_citrix_mcs_servers"
   account     = "${var.account}"
   environment = "${var.environment}"
   cloudwatch_rule_name = "${aws_cloudwatch_event_rule.trigger_ec2_instance_state_pending.name}"
   cloudwatch_rule_arn = "${aws_cloudwatch_event_rule.trigger_ec2_instance_state_pending.arn}"
-}
+}*/
 
 
 # Maintenance Window Parameter Injection
