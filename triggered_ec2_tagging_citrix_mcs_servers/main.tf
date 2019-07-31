@@ -18,7 +18,7 @@ resource "aws_lambda_function" "triggered_ec2_tagging_citrix_mcs_servers" {
   tags = "${local.base_tags}"
 
   memory_size = 128
-  timeout     = 2
+  timeout     = 30
 
   environment {
     variables = {
