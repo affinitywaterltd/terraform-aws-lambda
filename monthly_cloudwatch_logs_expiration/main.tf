@@ -38,6 +38,6 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
 # Attach Cloudwatch event to lambda function
 resource "aws_cloudwatch_event_target" "monthly_cloudwatch_logs_expiration" {
   target_id = "monthly_cloudwatch_logs_expiration"
-  arn = "${aws_lambda_function.triggered_ec2_tagmonthly_cloudwatch_logs_expirationging_citrix_mcs_servers.arn}"
+  arn = "${aws_lambda_function.monthly_cloudwatch_logs_expiration.arn}"
   rule = "${var.cloudwatch_rule_name}"
 }
