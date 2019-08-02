@@ -1,4 +1,5 @@
 import boto3
+import sys
 import os      #required to fetch environment varibles
 
 client = boto3.client('logs')
@@ -19,10 +20,17 @@ def lambda_handler(event, context):
         while log_nextToken is not None:
             print("Run - " + log_nextToken)
             if log_nextToken == "initial":
+                print("Getting Initial Log Groups")
                 log_groups = client.describe_log_groups(limit=50)
             else:
+                print("Getting Batch Log Groups")
                 log_groups = client.describe_log_groups(limit=50, nextToken=log_nextToken)
-            log_nextToken = log_groups['nextToken']
+                print("Successfully Obtained Batch Log Groups")
+            try:
+                log_nextToken = log_groups['nextToken']
+            except:
+                log_nextToken = None
+                print("Final Batch")
             log_groups = log_groups['logGroups']
             for log_group in log_groups:
                 try:
@@ -49,6 +57,6 @@ def lambda_handler(event, context):
                 #end try
             #end for
         #end while
-    except Exception as ex:
-        print(ex.message)
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
 #end fucntion
