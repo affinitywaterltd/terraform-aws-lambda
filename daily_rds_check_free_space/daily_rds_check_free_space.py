@@ -56,7 +56,7 @@ def lambda_handler(event, context):
             dp = response['Datapoints']
 
             if len(dp) == 0:
-                print 'WARN: Response from CloudWatch was empty for ',DBINFO[0]
+                print ('WARN: Response from CloudWatch was empty for ',DBINFO[0])
 
             for d in response['Datapoints']:
                 freegb=round(d['Minimum']/1024/1024/1024,1)
@@ -96,7 +96,7 @@ def lambda_handler(event, context):
                     EMAIL_BODY += DBINFO[0] + ' has ' + str(DBINFO[2]) + 'Gb allocated of which ' + str(DBINFO[3]) + 'Gb is free, that is ' + str(FREEPCT) + '% free\n'
 
     except Exception as error:
-        print error
+        print (error)
 
     print (EMAIL_BODY)
 
