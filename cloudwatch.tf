@@ -10,6 +10,12 @@ resource "aws_cloudwatch_event_rule" "schedule_daily" {
   schedule_expression = "cron(0 1 * * ? *)"
 }
 
+resource "aws_cloudwatch_event_rule" "schedule_multi_daily_0700_1500" {
+  name        = "schedule_multi_daily_0700_1500"
+  description = "Runs twice daily (0700 and 1500)"
+  schedule_expression = "cron(0 7,15 * * ? *)"
+}
+
 resource "aws_cloudwatch_event_rule" "trigger_maintenance_window_task_registered" {
   name        = "trigger_maintenance_window_task_registered"
   description = "Runs every time a maintenance window is updated"

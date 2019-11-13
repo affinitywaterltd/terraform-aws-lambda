@@ -42,6 +42,16 @@ module "monthly_cloudwatch_logs_expiration" {
   cloudwatch_rule_arn = "${aws_cloudwatch_event_rule.schedule_start_of_month.arn}"
 }
 
+# Configure RDS Free Space Checker
+
+module "daily_rds_check_free_space" {
+  source      = "./daily_rds_check_free_space"
+  account     = "${var.account}"
+  environment = "${var.environment}"
+  cloudwatch_rule_name = "${aws_cloudwatch_event_rule.schedule_multi_daily_0700_1500.name}"
+  cloudwatch_rule_arn = "${aws_cloudwatch_event_rule.schedule_multi_daily_0700_1500.arn}"
+}
+
 # Maintenance Window Parameter Injection
 /*
 module "triggered_maintenance_window_parameter_injection" {
