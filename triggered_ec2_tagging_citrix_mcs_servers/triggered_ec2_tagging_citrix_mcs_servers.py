@@ -34,8 +34,8 @@ def lambda_handler(event, context):
             print ('Instance Environment Tag: ' + instanceenvironment_tag)
             
             # Calculate Organisation from AWS account
-            choices_org = {'afb': "AFB"}
-            organisation_tag = choices_org.get(ACCOUNT, 'Affinity Water')
+            choices_org = {'afb': "AfB"}
+            organisation_tag = choices_org.get(ACCOUNT, 'AWL')
             print ('Organisation: ' + organisation_tag)
             
             # Configure Tag values
