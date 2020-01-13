@@ -14,3 +14,9 @@ data "terraform_remote_state" "core" {
     name = "AffinityWater/${var.account}-core-${var.environment}"
   }
 }
+
+# SNS Alerts
+variable "sns_sms_list_rds_alerts" {
+  description = "List of SMS addresses for SNS tpoic subscription - RDS Alerts"
+  default     = {"info" = [], "warn" = []}
+}	
