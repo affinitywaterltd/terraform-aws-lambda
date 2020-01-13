@@ -19,7 +19,7 @@ resource "aws_sns_topic_subscription" "sns-topic-info" {
 
 resource "aws_sns_topic_subscription" "sns-topic-warn" {
   count     = "${length(var.sns_sms_list_warn)}"
-  topic_arn = "${aws_sns_topic.sns_alerts_dba_warn.arn}"
+  topic_arn = "${aws_sns_topic.sns_alerts_dba_warning.arn}"
   protocol  = "sms"
   endpoint  = "${var.sns_sms_list_warn[count.index]}"
 }
