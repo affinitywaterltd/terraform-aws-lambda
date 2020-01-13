@@ -50,7 +50,8 @@ module "daily_rds_check_free_space" {
   environment = "${var.environment}"
   cloudwatch_rule_name = "${aws_cloudwatch_event_rule.schedule_multi_daily_0700_1500.name}"
   cloudwatch_rule_arn = "${aws_cloudwatch_event_rule.schedule_multi_daily_0700_1500.arn}"
-  sns_sms_list = "${var.sns_sms_list_rds_alerts}"
+  sns_sms_list_info = "${var.sns_sms_list_rds_alerts_info}"
+  sns_sms_list_warn = "${var.sns_sms_list_rds_alerts_warn}"
   
 }
 

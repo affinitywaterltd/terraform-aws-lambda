@@ -16,7 +16,12 @@ data "terraform_remote_state" "core" {
 }
 
 # SNS Alerts
-variable "sns_sms_list_rds_alerts" {
+variable "sns_sms_list_rds_alerts_info" {
   description = "List of SMS addresses for SNS tpoic subscription - RDS Alerts"
-  default     = {"info" = [], "warn" = []}
+  default     = []
+}	
+
+variable "sns_sms_list_rds_alerts_warn" {
+  description = "List of SMS addresses for SNS tpoic subscription - RDS Alerts"
+  default     = []
 }	
