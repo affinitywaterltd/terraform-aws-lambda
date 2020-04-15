@@ -1,10 +1,14 @@
+variable "account" {
+}
 
-variable "account" {}
-variable "environment" {}
+variable "environment" {
+}
+
 data "terraform_remote_state" "core" {
   backend = "atlas"
 
-  config {
+  config = {
     name = "AffinityWater/${var.account}-core-${var.environment}"
   }
 }
+

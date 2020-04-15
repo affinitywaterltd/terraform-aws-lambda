@@ -1,13 +1,20 @@
+variable "account" {
+}
 
-variable "account" {}
-variable "environment" {}
-variable "ses_smtp_user" {}
-variable "ses_smtp_password" {}
+variable "environment" {
+}
+
+variable "ses_smtp_user" {
+}
+
+variable "ses_smtp_password" {
+}
 
 data "terraform_remote_state" "core" {
   backend = "atlas"
 
-  config {
+  config = {
     name = "AffinityWater/${var.account}-core-${var.environment}"
   }
 }
+
