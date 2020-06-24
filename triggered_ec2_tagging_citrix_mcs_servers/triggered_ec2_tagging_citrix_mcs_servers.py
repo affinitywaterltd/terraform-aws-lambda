@@ -86,11 +86,7 @@ def lambda_handler(event, context):
             {
                "Key" : "Environment",
                "Value" : instanceenvironment_tag
-            },
-            {
-               "Key" : "Maintenance",
-               "Value" : "Citrix Mananged"
-            },
+            }
             {
                "Key" : "CreatedBy",
                "Value" : "Citrix"
@@ -102,14 +98,6 @@ def lambda_handler(event, context):
             {
                "Key" : "OperatingSystem",
                "Value" : "Windows Server 2016"
-            },
-            {
-               "Key" : "Scheduler:Startstop",
-               "Value" : "False"
-            },
-            {
-               "Key" : "Scheduler:Snapshot",
-               "Value" : "False"
             }
             ]
             
