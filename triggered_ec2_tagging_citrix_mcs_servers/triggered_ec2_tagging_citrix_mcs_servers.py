@@ -86,7 +86,7 @@ def lambda_handler(event, context):
             {
                "Key" : "Environment",
                "Value" : instanceenvironment_tag
-            }
+            },
             {
                "Key" : "CreatedBy",
                "Value" : "Citrix"
