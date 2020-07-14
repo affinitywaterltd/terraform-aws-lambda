@@ -12,8 +12,8 @@ resource "aws_cloudwatch_event_rule" "schedule_daily" {
 
 resource "aws_cloudwatch_event_rule" "schedule_multi_daily_0700_1500" {
   name                = "schedule_multi_daily_0700_1500"
-  description         = "Runs twice daily (0700 and 1500)"
-  schedule_expression = "cron(0 7,15 * * ? *)"
+  description         = "Runs twice daily (0715 and 1515)"
+  schedule_expression = "cron(15 7,15 * * ? *)"
 }
 
 resource "aws_cloudwatch_event_rule" "trigger_maintenance_window_task_registered" {
