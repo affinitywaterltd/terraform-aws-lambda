@@ -10,7 +10,7 @@ resource "aws_lambda_function" "daily_aws_backup_expired_deletion" {
   function_name = "daily_aws_backup_expired_deletion"
   filename      = "${path.module}/daily_aws_backup_expired_deletion.zip"
 
-  role             = data.terraform_remote_state.core.outputs.lambda_snapshot_cleanup_role
+  role             = aws_iam_role.lambda_aws_backup_cleanup_role.arn
   source_code_hash = filebase64sha256("${path.module}/daily_aws_backup_expired_deletion.zip")
   handler          = "daily_aws_backup_expired_deletion.lambda_handler"
   runtime          = "python3.8"
