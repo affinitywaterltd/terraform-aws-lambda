@@ -52,6 +52,14 @@ module "daily_rds_check_free_space" {
   sns_sms_list_warn    = var.sns_sms_list_rds_alerts_warn
 }
 
+module "daily_aws_backup_expired_deletion" {
+  source               = "./daily_aws_backup_expired_deletion"
+  account              = var.account
+  environment          = var.environment
+  cloudwatch_rule_name = aws_cloudwatch_event_rule.schedule_daily.name
+  cloudwatch_rule_arn  = aws_cloudwatch_event_rule.schedule_daily.arn
+}
+
 # Maintenance Window Parameter Injection
 /*
 module "triggered_maintenance_window_parameter_injection" {
