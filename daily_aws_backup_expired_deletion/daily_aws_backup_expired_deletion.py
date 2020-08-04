@@ -6,6 +6,8 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 backup = boto3.client('backup')
+page_size = 100
+response = []
 
 def lambda_handler(event, context):
 
@@ -17,9 +19,16 @@ def lambda_handler(event, context):
 
     # For each Vault
     for backupvault in backupVaultNames:
-        recoverypoints = backup.list_recovery_points_by_backup_vault(BackupVaultName=backupvault)
         logger.info("Checking Recover points in vault: " + backupvault)
-        for recoverypoint in recoverypoints['RecoveryPoints']:
-            if recoverypoint['Status'] == 'EXPIRED':
-                logger.info("Deleting expired recovery point: " + recoverypoint['RecoveryPointArn'])
-                result = backup.delete_recovery_point(BackupVaultName=backupvault,RecoveryPointArn=recoverypoint['RecoveryPointArn'])
+        while True:
+            if 'NextToken' in response:
+                logger.info("Next page")
+                recoverypoints = backup.list_recovery_points_by_backup_vault(BackupVaultName=backupvault, MaxResults=int(page_size),NextToken=response['NextToken'])
+            else:
+                logger.info("Next page")
+                recoverypoints = backup.list_recovery_points_by_backup_vault(BackupVaultName=backupvault, MaxResults=int(page_size))
+            
+            for recoverypoint in recoverypoints['RecoveryPoints']:
+                if recoverypoint['Status'] == 'EXPIRED':
+                    logger.info("Deleting expired recovery point: " + recoverypoint['RecoveryPointArn'])
+                    #result = backup.delete_recovery_point(BackupVaultName=backupvault,RecoveryPointArn=recoverypoint['RecoveryPointArn'])
