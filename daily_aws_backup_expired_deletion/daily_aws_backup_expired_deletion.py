@@ -31,4 +31,4 @@ def lambda_handler(event, context):
             for recoverypoint in recoverypoints['RecoveryPoints']:
                 if recoverypoint['Status'] == 'EXPIRED':
                     logger.info("Deleting expired recovery point: " + recoverypoint['RecoveryPointArn'])
-                    #result = backup.delete_recovery_point(BackupVaultName=backupvault,RecoveryPointArn=recoverypoint['RecoveryPointArn'])
+                    result = backup.delete_recovery_point(BackupVaultName=backupvault,RecoveryPointArn=recoverypoint['RecoveryPointArn'])
