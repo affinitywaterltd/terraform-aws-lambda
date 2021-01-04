@@ -13,9 +13,9 @@ resource "aws_lambda_function" "auto_daily_mw_snapshot_cleanup" {
   role             = data.terraform_remote_state.core.outputs.lambda_snapshot_cleanup_role
   source_code_hash = filebase64sha256("${path.module}/auto_daily_mw_snapshot_cleanup.zip")
   handler          = "auto_daily_mw_snapshot_cleanup.lambda_handler"
-  runtime          = "python3.6"
+  runtime          = "python3.8"
 
-  description = "Deletes snapshots older than 14 tags if tagged with MaintenanceWindow"
+  description = "Deletes AMIs/snapshots older than 14 tags if name starts with MaintenanceWindow"
 
   tags = local.base_tags
 
