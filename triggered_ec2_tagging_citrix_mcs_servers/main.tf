@@ -15,7 +15,7 @@ resource "aws_lambda_function" "triggered_ec2_tagging_citrix_mcs_servers" {
     "${path.module}/triggered_ec2_tagging_citrix_mcs_servers.zip",
   )
   handler = "triggered_ec2_tagging_citrix_mcs_servers.lambda_handler"
-  runtime = "python3.7"
+  runtime = "python3.8"
 
   description = "Add default tags to servers created by Citrix Machine Creation Services (MCS)"
 

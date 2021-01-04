@@ -36,16 +36,24 @@ def lambda_handler(event, context):
                 try:
                     log_group_name = log_group['logGroupName']
                     log_group_retention = log_group['retentionInDays']
-                    print (log_group_name + " - " + str(log_group_retention))
+                    log_group_stored_bytes = log_group['storedBytes']
+                    
+                    print (log_group_name + " - " + str(log_group_retention) + " - " + str(log_group_stored_bytes))
+                    
+                    if log_group_stored_bytes == 0:
+                            print ("Log Group Empty - DELETING - " + log_group_name)
+                            client.delete_log_group(logGroupName=log_group_name)
+                            print ("Log Group Empty - DELETED - " + log_group_delete_response)
+                    
                     if OVERWRITE == "true":
                         try:
-                            print ("Overwrite Enabled - updating log group - " + log_group_name)
                             response = client.put_retention_policy(logGroupName=log_group_name,retentionInDays=RETENTION_POLICY_DAYS)
                             print ("Retenion policy updated successfully")
                         except:
                             print ("An error occurred whilst updating log group - " + log_group_name) 
                     #end if
                 except:
+                    print ("Log Group Empty - DELETED - " + log_group_delete_response)
                     # Retention Policy not set
                     print (log_group_name + " - Not Set")
                     print ("Retention Policy will be applied - " + str(RETENTION_POLICY_DAYS) + " days")
@@ -55,6 +63,7 @@ def lambda_handler(event, context):
                     except:
                         print ("An error occurred whilst updating log group - " + log_group_name)
                 #end try
+                
             #end for
         #end while
     except:

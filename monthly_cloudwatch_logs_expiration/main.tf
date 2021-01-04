@@ -13,14 +13,14 @@ resource "aws_lambda_function" "auto_monthly_cloudwatch_logs_expiration" {
   role             = data.terraform_remote_state.core.outputs.lambda_cloudwatch_logs_expiration_role
   source_code_hash = filebase64sha256("${path.module}/auto_monthly_cloudwatch_logs_expiration.zip")
   handler          = "auto_monthly_cloudwatch_logs_expiration.lambda_handler"
-  runtime          = "python3.7"
+  runtime          = "python3.8"
 
-  description = "Adds a retention policy to any CloudWatch Logs that are set to never expire. Can set overwrite variable to 'true' to force all logs to match retention policy settings"
+  description = "Adds a retention policy to any CloudWatch Logs that are set to never expire. Can set overwrite variable to 'true' to force all logs to match retention policy settings. If LogGroup has 0 StoredBytes (its empty), it deleted the logGroup"
 
   tags = local.base_tags
 
   memory_size = 128
-  timeout     = 60
+  timeout     = 120
 
   environment {
     variables = {
