@@ -65,6 +65,6 @@ def lambda_handler(event, context):
     print("context " + str(context))
     region_name = "eu-west-1"
     instances = Ec2Instances(region_name)
-    deleted_counts = instances.delete_snapshots(0)
+    deleted_counts = instances.delete_snapshots(14)
     print("deleted_counts for region "+ str(region_name) +" is " + str(deleted_counts))
     return 'completed'
