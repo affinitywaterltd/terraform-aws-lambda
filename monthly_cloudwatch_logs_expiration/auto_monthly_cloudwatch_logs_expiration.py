@@ -35,16 +35,25 @@ def lambda_handler(event, context):
             for log_group in log_groups:
                 try:
                     log_group_name = log_group['logGroupName']
-                    log_group_retention = log_group['retentionInDays']
-                    log_group_stored_bytes = log_group['storedBytes']
+                    try:
+                        log_group_retention = log_group['retentionInDays']
+                    except:
+                        log_group_retention = 0
+                    try:
+                        log_group_stored_bytes = log_group['storedBytes']
+                    except:
+                        log_group_stored_bytes = 0
                     
                     print (log_group_name + " - " + str(log_group_retention) + " - " + str(log_group_stored_bytes))
                     
                     if log_group_stored_bytes == 0:
+                        try:
                             print ("Log Group Empty - DELETING - " + log_group_name)
                             client.delete_log_group(logGroupName=log_group_name)
                             print ("Log Group Empty - DELETED - " + log_group_delete_response)
-                    
+                        except:
+                            print ("normal error during deletion")
+                            
                     if OVERWRITE == "true":
                         try:
                             response = client.put_retention_policy(logGroupName=log_group_name,retentionInDays=RETENTION_POLICY_DAYS)
