@@ -98,6 +98,14 @@ def lambda_handler(event, context):
             {
                "Key" : "OperatingSystem",
                "Value" : "Windows Server 2016"
+            },
+            {
+               "Key" : "Terraform",
+               "Value" : "False"
+            },
+            {
+               "Key" : "ssmMaintenanceWindow",
+               "Value" : "False"
             }
             ]
             
