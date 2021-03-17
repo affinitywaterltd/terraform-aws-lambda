@@ -70,3 +70,11 @@ module "triggered_maintenance_window_parameter_injection" {
   cloudwatch_rule_arn = "${aws_cloudwatch_event_rule.trigger_maintenance_window_task_registered.arn}"
 }
 */
+
+module "triggered_ec2_ssm_iam_role_attachment" {
+  source               = "./triggered_ec2_ssm_iam_role_attachment"
+  account              = var.account
+  environment          = var.environment
+  cloudwatch_rule_name = aws_cloudwatch_event_rule.trigger_ec2_instance_state_pending.name
+  cloudwatch_rule_arn  = aws_cloudwatch_event_rule.trigger_ec2_instance_state_pending.arn
+}
