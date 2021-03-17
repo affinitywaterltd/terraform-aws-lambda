@@ -51,3 +51,9 @@ resource "aws_iam_role_policy_attachment" "lambda_ec2_ssm_iam_policy_attach" {
   role       = aws_iam_role.lambda_ec2_ssm_iam_role.name
   policy_arn = aws_iam_policy.lambda_ec2_ssm_iam_policy.arn
 }
+
+
+resource "aws_iam_role_policy_attachment" "lambda_ec2_ssm_iam_policy_execution_attach" {
+  role       = aws_iam_role.lambda_ec2_ssm_iam_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
