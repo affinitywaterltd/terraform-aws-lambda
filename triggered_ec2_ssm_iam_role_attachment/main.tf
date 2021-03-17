@@ -26,8 +26,7 @@ resource "aws_lambda_function" "triggered_ec2_ssm_iam_role_attachment" {
 
   environment {
     variables = {
-      account     = var.account
-      environment = var.environment
+      role_name = "ssm_role"
     }
   }
 }

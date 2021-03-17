@@ -19,13 +19,8 @@ resource "aws_iam_role" "lambda_ec2_ssm_iam_role" {
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_snapshot_cleaup_policy_attach" {
-  role       = aws_iam_role.lambda_ec2_ssm_iam_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
-}
-/*
-resource "aws_iam_policy" "lambda_cloudwatch_logs_writing_policy" {
-  name   = "lambda-cloudwatch-logs-writing"
+resource "aws_iam_policy" "lambda_ec2_ssm_iam_policy" {
+  name   = "lambda_ec2_ssm_iam_policy"
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -34,20 +29,25 @@ resource "aws_iam_policy" "lambda_cloudwatch_logs_writing_policy" {
             "Sid": "VisualEditor0",
             "Effect": "Allow",
             "Action": [
-                "logs:DescribeLogGroups",
-                "logs:PutRetentionPolicy",
-                "logs:CreateLogGroup",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
+                "ec2:DescribeInstances",
+                "ec2:AssociateIamInstanceProfile"
             ],
             "Resource": "*"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": [
+                "iam:PassRole"
+            ],
+            "Resource": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/ssm_role"
         }
     ]
 }
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_backup_logging_policy_attach" {
-  role       = aws_iam_role.lambda_aws_backup_cleanup_role.name
-  policy_arn = aws_iam_policy.lambda_cloudwatch_logs_writing_policy.arn
-}*/
+resource "aws_iam_role_policy_attachment" "lambda_ec2_ssm_iam_policy_attach" {
+  role       = aws_iam_role.lambda_ec2_ssm_iam_role.name
+  policy_arn = aws_iam_policy.lambda_ec2_ssm_iam_policy.arn
+}

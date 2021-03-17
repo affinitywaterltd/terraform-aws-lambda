@@ -12,3 +12,4 @@ data "terraform_remote_state" "core" {
   }
 }
 
+data "aws_caller_identity" "current" {}
