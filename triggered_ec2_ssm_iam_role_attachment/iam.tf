@@ -20,7 +20,7 @@ resource "aws_iam_role" "lambda_ec2_ssm_iam_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_snapshot_cleaup_policy_attach" {
-  role       = aws_iam_role.lambda_aws_backup_cleanup_role.name
+  role       = aws_iam_role.lambda_ec2_ssm_iam_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
 }
 /*
