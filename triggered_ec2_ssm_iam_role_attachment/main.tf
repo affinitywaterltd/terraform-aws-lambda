@@ -10,7 +10,7 @@ resource "aws_lambda_function" "triggered_ec2_ssm_iam_role_attachment" {
   function_name = "triggered_ec2_ssm_iam_role_attachment"
   filename      = "${path.module}/triggered_ec2_ssm_iam_role_attachment.zip"
 
-  role = aws_iam_role.lambda_ec2_ssm_iam_role.name
+  role = aws_iam_role.lambda_ec2_ssm_iam_role.arn
   source_code_hash = filebase64sha256(
     "${path.module}/triggered_ec2_ssm_iam_role_attachment.zip",
   )
