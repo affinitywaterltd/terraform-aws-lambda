@@ -12,15 +12,14 @@ iam_role_arn = "arn:aws:iam::{}:instance-profile/{}".format(account_id, ROLE_NAM
 
 
 def lambda_handler(event, context):
-    ec2 = boto3.resource('ec2')
-    instanceid = event['detail']['instance-id']
-    #instanceid = 'i-0496caa71efa41cbe' #In case manual adding is needed for testing
-    instance = ec2.Instance(id=instanceid)
-    iam_role = instance.iam_instance_profile
-    
-    print (iam_role)
-    if iam_role == None:
-      print ('Updating IAM Role to: {}'.format(iam_role_arn))
+   ec2 = boto3.resource('ec2')
+   instanceid = event['detail']['instance-id']
+
+   instance = ec2.Instance(id=instanceid)
+   iam_role = instance.iam_instance_profile
+   print ('{} - Current IAM Role - {}'.format(instanceid, iam_role))
+   if iam_role == None:
+      print ('{} - Updating IAM Role to - {}'.format(instanceid, iam_role_arn))
       # Set instance IAM Role
       ec2client.associate_iam_instance_profile(
          IamInstanceProfile={
@@ -29,6 +28,9 @@ def lambda_handler(event, context):
          },
          InstanceId=instanceid
       )   
-      print ('IAM Role Updated')
-
+      print ('{} - Successfully Updated IAM Role to - {}'.format(instanceid, iam_role_arn))
+      return 0
+   else:
+      print ('{} - IAM Role already assigned - {}'.format(instanceid, iam_role))
+      return 0
 #End Function
