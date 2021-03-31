@@ -78,3 +78,10 @@ module "triggered_ec2_ssm_iam_role_attachment" {
   cloudwatch_rule_name = aws_cloudwatch_event_rule.trigger_ec2_instance_state_pending.name
   cloudwatch_rule_arn  = aws_cloudwatch_event_rule.trigger_ec2_instance_state_pending.arn
 }
+
+module "ssm_start_stopped_instances" {
+  source               = "./ssm_start_stopped_instances"
+  account              = var.account
+  environment          = var.environment
+
+}
