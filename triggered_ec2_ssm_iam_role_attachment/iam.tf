@@ -40,7 +40,10 @@ resource "aws_iam_policy" "lambda_ec2_ssm_iam_policy" {
             "Action": [
                 "iam:PassRole"
             ],
-            "Resource": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/ssm_role"
+            "Resource": [
+              "arn:aws:iam::739672810541:role/*",
+              "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/ssm_role"
+            ]
         }
     ]
 }

@@ -22,7 +22,7 @@ resource "aws_lambda_function" "triggered_ec2_ssm_iam_role_attachment" {
   tags = local.base_tags
 
   memory_size = 128
-  timeout     = 30
+  timeout     = 300
 
   environment {
     variables = {

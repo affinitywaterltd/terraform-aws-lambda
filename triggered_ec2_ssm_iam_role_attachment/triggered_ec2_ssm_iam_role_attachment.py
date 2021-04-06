@@ -14,8 +14,11 @@ iam_role_arn = "arn:aws:iam::{}:instance-profile/{}".format(account_id, ROLE_NAM
 def lambda_handler(event, context):
    ec2 = boto3.resource('ec2')
    instanceid = event['detail']['instance-id']
-
    instance = ec2.Instance(id=instanceid)
+   print ("Waiting for EC2 to become running - {}".format(instanceid))
+   instance.wait_until_running()
+   print ("EC2 is now running - {}".format(instanceid))
+
    iam_role = instance.iam_instance_profile
    print ('{} - Current IAM Role - {}'.format(instanceid, iam_role))
    if iam_role == None:
