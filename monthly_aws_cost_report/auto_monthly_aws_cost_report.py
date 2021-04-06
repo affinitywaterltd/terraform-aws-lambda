@@ -1,79 +1,76 @@
 import boto3
+from botocore.exceptions import ClientError
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
 import datetime
 import time
 import re
 import smtplib
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMEBase import MIMEBase
-from email.MIMEText import MIMEText
-from email import Encoders
 import os      #required to fetch environment varibles
 import hmac    #required to compute the HMAC key
 import hashlib #required to create a SHA256 hash
 import base64  #required to encode the computed key
 import sys     #required for system functions (exiting, in this case)
 
+AWS_REGION = 'eu-west-1'
+
 # Set up resource calls
 ec2 = boto3.resource('ec2')
 s3 = boto3.resource('s3')
 rds = boto3.client('rds')
 iam = boto3.client('iam')
+ses = boto3.client('ses',region_name=AWS_REGION)
 
 #Email settings
 
 SES_SMTP_USER = os.environ['smtp_ses_user']
 SES_SMTP_PASSWORD_RAW = os.environ['smtp_ses_password']
 
-MAIL_FROM = 'infra@affinitywater.co.uk'
-MAIL_TO = ['infra@affinitywater.co.uk']
-MAIL_SUBJECT="AWS Monthly Report"
-MAIL_BODY=MAIL_SUBJECT + '\n'
+SENDER = 'infra@affinitywater.co.uk'
+RECIPIENT = 'infra@affinitywater.co.uk'
+SUBJECT = "AWS Monthly Report"
+BODY = SUBJECT + '\n'
+CHARSET = "UTF-8"
+
 filepath = '/tmp/monthly.csv'
 
-# Fetch the environment variable called smtp_ses_password, which contains
-# the secret access key for your IAM user.
-key = SES_SMTP_PASSWORD_RAW
-
-# These varibles are used when calculating the SMTP password. You shouldn't
-# change them.
-message = 'SendRawEmail'
-version = '\x02'
-
-# See if the environment variable exists. If not, quit and show an error.
-if key == 0:
-    sys.exit("Error: Can't find environment variable smtp_ses_password.")
-
-# Compute an HMAC-SHA256 key from the AWS secret access key.
-signatureInBytes = hmac.new(key.encode('utf-8'),message.encode('utf-8'),hashlib.sha256).digest()
-# Prepend the version number to the signature.
-signatureAndVersion = version.encode('utf-8') + signatureInBytes
-# Base64-encode the string that contains the version number and signature.
-SES_SMTP_PASSWORD = base64.b64encode(signatureAndVersion)
-# Decode the string and print it to the console.
-print(SES_SMTP_PASSWORD.decode('utf-8'))
 
 #Set up email server using AWS SMPTP
 
-def mail(fromadd,to, subject, text, attach):
-       msg = MIMEMultipart()
-       msg['From'] = fromadd
-       msg['To'] = ", ".join(to)
-       msg['Subject'] = subject
-       msg.attach(MIMEText(text))
-       part = MIMEBase('application', 'octet-stream')
-       part.set_payload(open(attach, 'rb').read())
-       Encoders.encode_base64(part)
-       part.add_header('Content-Disposition','attachment; filename="%s"' % os.path.basename(attach))
-       msg.attach(part)
-       mailServer = smtplib.SMTP("email-smtp.eu-west-1.amazonaws.com", 587)
-       mailServer.ehlo()
-       mailServer.starttls()
-       mailServer.ehlo()
-       mailServer.login(SES_SMTP_USER, SES_SMTP_PASSWORD)
-       mailServer.sendmail(fromadd, to, msg.as_string())
-       print "Email sent"
-       # Should be mailServer.quit(), but that crashes...
-       mailServer.close()
+def mail(RECIPIENT, SENDER, SUBJECT, BODY, attach, alias):
+    msg = MIMEMultipart('mixed')
+    msg['Subject'] = SUBJECT 
+    msg['From'] = SENDER 
+    msg['To'] = RECIPIENT
+    msg_body = MIMEMultipart('alternative')
+    textpart = MIMEText(BODY.encode(CHARSET), 'plain', CHARSET)
+    msg_body.attach(textpart)
+    
+    att = MIMEApplication(open(filepath, 'rb').read())
+    att.add_header('Content-Disposition','attachment',filename="{}.csv".format(alias))
+    if os.path.exists(filepath):
+        print("File exists")
+    else:
+        print("File does not exists")
+       
+    msg.attach(msg_body)
+    msg.attach(att)
+    try:
+    #Provide the contents of the email.
+        response = ses.send_raw_email(
+            Source=msg['From'],
+            Destinations=[
+                msg['To']
+            ],
+            RawMessage={
+                'Data':msg.as_string(),
+            }
+        )
+    except ClientError as e:
+        return(e.response['Error']['Message'])
+    else:
+        return("Email sent! Message ID:", response['MessageId'])
        
 def servers():  # Write instance tags to file
 
@@ -88,40 +85,43 @@ def servers():  # Write instance tags to file
         try:
             for tag in i.tags:
                     try:
-                        name = (item for item in i.tags if item["Key"] == "Name" ).next()
+                        name = (item for item in i.tags if item["Key"] == "Name" ).__next__()
                     except StopIteration:
                         name['Value'] = 'Unknown'
+                        print ("Name Unknown - {}".format(i.id))
                         
                     try:
-                        createdate = (item for item in i.tags if item["Key"] == "CreationDate" ).next()
+                        createdate = (item for item in i.tags if item["Key"] == "CreationDate" ).__next__()
                     except StopIteration:
                         createdate['Value'] = 'Unknown'
+                        print ("CreationDate Unknown - {}".format(i.id))
     
                     try:
-                        costcentre  = (item for item in i.tags if item["Key"] == "CostCentre" ).next()
+                        costcentre  = (item for item in i.tags if item["Key"] == "CostCentre" ).__next__()
                     except StopIteration:
                         costcentre['Value'] = 'Unknown'
+                        print ("CostCentre Unknown - {}".format(i.id))
                     
                     try:
-                        quadrant = (item for item in i.tags if item["Key"] == "Quadrant" ).next()
+                        quadrant = (item for item in i.tags if item["Key"] == "Quadrant" ).__next__()
                     except StopIteration:
                         quadrant['Value'] = 'Unknown'
+                        print ("Quadrant Unknown - {}".format(i.id))
                     
                     try:
-                        description = (item for item in i.tags if item["Key"] == "Description" ).next()
+                        description = (item for item in i.tags if item["Key"] == "Description" ).__next__()
                     except StopIteration:
                         description['Value'] = 'Unknown'
-
+                        print ("Description Unknown - {}".format(i.id))
         except:
-            print i.id
+            print ("exception - {}".format(i.id))
             processerr = 'true'
 
         EC2 = 'EC2'
-
         if processerr == 'false':
             f.write('%s,%s,%s,%s,%s,%s,%s,%s, %s\n' %(name['Value'], EC2, i.instance_type, i.platform, createdate['Value'], costcentre['Value'], quadrant['Value'], i.state['Name'], description['Value']))
         else:
-            print i.id
+            print (i)
         
 def databases(): # Write DB instance tags to file
     
@@ -130,39 +130,45 @@ def databases(): # Write DB instance tags to file
 
     databases = rds.describe_db_instances()
     for db in databases['DBInstances']:
-        dbname = db['DBInstanceIdentifier']
-        dbsize = db['DBInstanceClass']
-        dbengine = db['Engine']
-        dbstatus = db['DBInstanceStatus']
-        dbcreatedate = db['InstanceCreateTime'].strftime("%Y-%m-%d")
-        dbencryption = db['StorageEncrypted']
-
-        
-        currentdb = db['DBInstanceArn']
-        taglist = rds.list_tags_for_resource(ResourceName = currentdb)['TagList']
-        
-        for tag in taglist:
-            try:
-                dbcostcentre  = (item for item in taglist if item["Key"] == "CostCentre" ).next()
-            except:
-                dbcostcentre['Value'] = 'Unknown'
-                
-        for tag in taglist:
-            try:
-                dbquadrant  = (item for item in taglist if item["Key"] == "Quadrant" ).next()
-            except:
-                dbquadrant['Value'] = 'Unknown'
-                
-        for tag in taglist:
-            try:
-                dbdescription  = (item for item in taglist if item["Key"] == "Description" ).next()
-            except:
-                dbdescription['Value'] = 'Unknown'
-                
-        RDS = 'RDS'
-
-        f.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' %(dbname, RDS, dbsize, dbengine, dbcreatedate, dbcostcentre['Value'], dbquadrant['Value'], dbstatus, dbdescription['Value'], dbencryption))
-        
+        processdberr = 'false'
+        try:
+            dbname = db['DBInstanceIdentifier']
+            dbsize = db['DBInstanceClass']
+            dbengine = db['Engine']
+            dbstatus = db['DBInstanceStatus']
+            dbcreatedate = db['InstanceCreateTime'].strftime("%Y-%m-%d")
+            dbencryption = db['StorageEncrypted']
+    
+            
+            currentdb = db['DBInstanceArn']
+            taglist = rds.list_tags_for_resource(ResourceName = currentdb)['TagList']
+            
+            for tag in taglist:
+                try:
+                    dbcostcentre  = (item for item in taglist if item["Key"] == "CostCentre" ).__next__()
+                except:
+                    dbcostcentre['Value'] = 'Unknown'
+                    
+            for tag in taglist:
+                try:
+                    dbquadrant  = (item for item in taglist if item["Key"] == "Quadrant" ).__next__()
+                except:
+                    dbquadrant['Value'] = 'Unknown'
+                    
+            for tag in taglist:
+                try:
+                    dbdescription  = (item for item in taglist if item["Key"] == "Description" ).__next__()
+                except:
+                    dbdescription['Value'] = 'Unknown'
+        except:
+            print ("exception - {}".format(dbname))
+            processdberr = 'true'
+        if processdberr == 'false':            
+            RDS = 'RDS'
+            f.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' %(dbname, RDS, dbsize, dbengine, dbcreatedate, dbcostcentre['Value'], dbquadrant['Value'], dbstatus, dbdescription['Value'], dbencryption))
+        else:
+            print (dbname)
+            
 def lambda_handler(event, context):
     
     # Get Account Name
@@ -171,11 +177,11 @@ def lambda_handler(event, context):
     for response in paginator.paginate():
         alias = (response['AccountAliases'][0])
         
-    MAIL_SUBJECT = "AWS Monthly Report - " + alias
+    SUBJECT = "AWS Monthly Report - " + alias
     
     servers()
     databases()
 
     # Send emails
-    mail(MAIL_FROM, MAIL_TO, MAIL_SUBJECT, MAIL_BODY, filepath)
-    print "Email sent"
+    mail(RECIPIENT, SENDER, SUBJECT, BODY, filepath, alias)
+    print ("Email sent")

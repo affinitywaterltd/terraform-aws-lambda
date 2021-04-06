@@ -10,10 +10,10 @@ resource "aws_lambda_function" "monthly_aws_cost_report" {
   function_name = "auto_monthly_aws_cost_report"
   filename      = "${path.module}/auto_monthly_aws_cost_report.zip"
 
-  role             = data.terraform_remote_state.core.outputs.lambda_report_role
+  role             = aws_iam_role.lambda_aws_cost_report_role.arn
   source_code_hash = filebase64sha256("${path.module}/auto_monthly_aws_cost_report.zip")
   handler          = "auto_monthly_aws_cost_report.lambda_handler"
-  runtime          = "python2.7"
+  runtime          = "python3.8"
 
   description = "Lists all the cost centre/quadrant for EC2 and RDS - emails and uploads to S3"
 
@@ -21,13 +21,6 @@ resource "aws_lambda_function" "monthly_aws_cost_report" {
 
   memory_size = 128
   timeout     = 300
-
-  environment {
-    variables = {
-      smtp_ses_password = var.ses_smtp_password
-      smtp_ses_user     = var.ses_smtp_user
-    }
-  }
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch" {
