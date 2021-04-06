@@ -31,7 +31,9 @@ resource "aws_iam_policy" "lambda_aws_cost_report_policy" {
             "Action": [
                 "ec2:DescribeInstances",
                 "rds:DescribeDbInstances",
-                "ses:SendRawEmail"
+                "rds:ListTagsForResource",
+                "ses:SendRawEmail",
+                "iam:ListAccountAliases"
             ],
             "Resource": "*"
         }

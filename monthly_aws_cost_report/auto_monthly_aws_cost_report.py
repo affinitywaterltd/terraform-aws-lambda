@@ -4,13 +4,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 import datetime
-import time
-import re
-import smtplib
-import os      #required to fetch environment varibles
-import hmac    #required to compute the HMAC key
-import hashlib #required to create a SHA256 hash
-import base64  #required to encode the computed key
+import os
 import sys     #required for system functions (exiting, in this case)
 
 AWS_REGION = 'eu-west-1'
@@ -23,10 +17,6 @@ iam = boto3.client('iam')
 ses = boto3.client('ses',region_name=AWS_REGION)
 
 #Email settings
-
-SES_SMTP_USER = os.environ['smtp_ses_user']
-SES_SMTP_PASSWORD_RAW = os.environ['smtp_ses_password']
-
 SENDER = 'infra@affinitywater.co.uk'
 RECIPIENT = 'infra@affinitywater.co.uk'
 SUBJECT = "AWS Monthly Report"
