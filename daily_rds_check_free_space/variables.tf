@@ -1,6 +1,3 @@
-variable "account" {}
-variable "environment" {}
-
 variable "sns_sms_list_info" {
   default = []
 }
@@ -8,6 +5,18 @@ variable "sns_sms_list_info" {
 variable "sns_sms_list_warn" {
   default = []
 }
+
+locals {
+  environment_map = {
+    dev = "dev"
+    sit = "dev"
+    uat = "prod"
+    prod = "prod"
+  }
+}
+
+variable "account" {}
+variable "environment" {}
 
 data "terraform_remote_state" "core" {
   backend = "remote"

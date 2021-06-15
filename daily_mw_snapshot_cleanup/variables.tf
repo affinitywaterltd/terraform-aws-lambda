@@ -1,3 +1,12 @@
+locals {
+  environment_map = {
+    dev = "dev"
+    sit = "dev"
+    uat = "prod"
+    prod = "prod"
+  }
+}
+
 variable "account" {}
 variable "environment" {}
 
